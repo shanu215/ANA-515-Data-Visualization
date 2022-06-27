@@ -1,0 +1,84 @@
+---
+title: "ANA-515 Assignment 2"
+author: "Shahnawaz Shaik"
+date: '2022-06-20'
+output: html_document
+---
+
+```{r get-data, include = FALSE}
+library(readxl)
+EVDatabase <- read_excel("C:\\mydata\\Cheapestelectriccars-EVDatabase.xls")
+
+newdata <- EVDatabase
+```
+
+```{r}
+library(dplyr)
+```
+
+#this next line is creating a subset called 'SUV' of the gun_data dataset where the age is equal or greater to 65
+```{r}
+SUV <- newdata %>% 
+  filter(NumberofSeats >= 5)
+summary(SUV)
+
+AllWheel<-filter(newdata, Drive=="All Wheel Drive")
+```
+
+#Let's just see the Name and Acceleration columns
+```{r}
+select(newdata, Name, Acceleration)
+#Let's arrange our data, Names of the cars by Range
+arrange(newdata, Name, Range)
+```
+
+#This next chunk is inline code. Inline code puts the text with the output of the function in the document.
+
+
+```{r}
+#this makes a new data.frame called text_tbl with two columns, Names and Description
+text_tblnew <- data.frame( 
+Names = c("Name", "Subtitle", "Acceleration","TopSpeed","Efficiency","FastChargeSpeed","Drive","NumberofSeats","PriceinGermanyx","PriceinUK"), 
+          Description = c("Name of the car","Subtitle","Acceleration of the car","TopSpeed of the car","Efficiency of the car","FastChargeSpeed of the car","Drive of the car","NumberofSeats of the car","PriceinGermanyx of the car","PriceinUK of the car")
+) 
+
+#prints the table
+text_tblnew 
+
+#kable will make the table look better
+knitr::kable(text_tblnew, "pipe")
+```
+
+# picking three columns to use summary function:
+```{r}
+data_pick3 <- select(newdata, "Acceleration","TopSpeed","Efficiency")
+```
+
+Produce a summary of the subset:
+```{r, include = TRUE}
+Summarytable<-summary(data_pick3) #creates the summary
+print(Summarytable)
+```
+
+
+# Enhanced Histogram of cars vs seats
+# by Number of Car Cylinders
+```{r, include = TRUE}
+x <- newdata$Name
+y <- newdata$NumberofSeats
+
+hist(y,
+     main="Distribution of EV Cars by number of seats",
+     xlab="Number of Seats in a car",
+     col="blue")
+
+# Plot with main and axis titles
+# Change point shape (pch = 19) and remove frame.
+# Drawing 
+# Gun deaths by age 
+
+library(ggplot2)
+SUV %>% 
+ggplot(aes(NumberofSeats)) + 
+geom_freqpoly(binwidth = 1)
+```
